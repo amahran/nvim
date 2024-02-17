@@ -23,7 +23,7 @@ return {
         },
         config = function()
             require('mason-lspconfig').setup {
-                -- ensure_installed = { 'clangd', 'lua_ls'  },
+                ensure_installed = { 'clangd', 'lua_ls', 'dockerls'  },
                 -- this will install whatever install with lspconfig.{lsp} automatically
                 -- TODO: There is a circular dependency between that and configuring the servers
                 automatic_installation = true,
@@ -33,6 +33,7 @@ return {
             local lspconfig = require('lspconfig')
             lspconfig.lua_ls.setup {}
             lspconfig.clangd.setup {}
+            lspconfig.dockerls.setup {}
 
             -- Global mappings.
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions
