@@ -18,7 +18,7 @@ local options = {
     -- TODO: Probably not a very good idea to mix things up
     -- clipboard = 'unnamedplus',
 
-    scrolloff = 999,
+    scrolloff = 8,
 
     virtualedit = 'block',
 
