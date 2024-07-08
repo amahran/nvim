@@ -14,6 +14,9 @@ return {
 
         require('nvim-treesitter.configs').setup({
             ensure_installed = parsers,
+            sync_install = false, -- Install languages synchronously (only applied to `ensure_installed`)
+            ignore_install = { "" }, -- List of parsers to ignore installing
+            modules = {}, -- Additional modules configuration can go here
 
             -- this will install the required parsers automatically
             -- anyway if a file has been opened which didn't have a parser installed
