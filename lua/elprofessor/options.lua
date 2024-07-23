@@ -46,6 +46,9 @@ local options = {
     -- however undotree might be used for this purpose instead of swap
 
     colorcolumn = "80",
+
+    -- (de)activate by :set (no)list to show white space characters
+    listchars = "tab:→ ,trail:·,space:·,eol:↲"
 }
 
 
