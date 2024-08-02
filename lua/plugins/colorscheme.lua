@@ -1,3 +1,4 @@
+-- Plugin setup using lazy.nvim
 return {
     {
         'rebelot/kanagawa.nvim',
@@ -34,7 +35,6 @@ return {
                 },
                 dim_inactive = true,
             })
-            vim.cmd.colorscheme('tokyonight-moon')
         end,
     },
     {
@@ -56,7 +56,7 @@ return {
     },
     {
         "ellisonleao/gruvbox.nvim",
-        priority = 1000 ,
+        priority = 1000,
         config = function()
             require("gruvbox").setup({
                 terminal_colors = true, -- add neovim terminal colors
@@ -86,3 +86,4 @@ return {
         end,
     },
 }
+
