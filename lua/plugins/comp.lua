@@ -15,6 +15,7 @@ return {
             -- Set up nvim-cmp.
             local cmp = require'cmp'
             local lspkind = require('lspkind')
+            local luasnip = require'luasnip'
 
             cmp.setup({
                 snippet = {
@@ -29,6 +30,21 @@ return {
                     ['<C-Space>'] = cmp.mapping.complete(),
                     ['<C-e>'] = cmp.mapping.abort(),
                     ['<C-y>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                    -- alt-i for jumping to the layed out function arguments by the lsp
+                    ['<M-i>'] = cmp.mapping(function(fallback)
+                        if luasnip.jumpable(1) then
+                            luasnip.jump(1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                    ['<M-o>'] = cmp.mapping(function(fallback)
+                        if luasnip.jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
                 }),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },

@@ -32,7 +32,20 @@ return {
             -- Setup language servers.
             local lspconfig = require('lspconfig')
             lspconfig.lua_ls.setup {}
-            lspconfig.clangd.setup {}
+            lspconfig.clangd.setup {
+                cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
+                filetypes = { "c", "cpp", "objc", "objcpp" },
+                root_dir = require('lspconfig').util.root_pattern("compile_commands.json", ".git", "tags", "Makefile", "CMakeLists.txt"),
+                capabilities = vim.lsp.protocol.make_client_capabilities(),
+                init_options = {
+                    clangdFileStatus = true,
+                    fallbackFlags = { "-std=c++17" },
+                },
+                on_attach = function(client, bufnr)
+                    -- Enable more capabilities or commands here if necessary
+                end,
+            }
+
             lspconfig.dockerls.setup {}
 
             -- Global mappings.
@@ -76,4 +89,21 @@ return {
             })
         end,
     },
+    {
+        'p00f/clangd_extensions.nvim',
+        config = function()
+            require("clangd_extensions").setup {
+                server = {
+                    cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
+                    filetypes = { "c", "cpp", "objc", "objcpp" },
+                },
+                extensions = {
+                    autoSetHints = true,
+                    inlay_hints = {
+                        highlight = "Comment",
+                    },
+                },
+            }
+        end,
+    }
 }
