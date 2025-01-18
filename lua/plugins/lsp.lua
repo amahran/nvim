@@ -23,7 +23,7 @@ return {
         },
         config = function()
             require('mason-lspconfig').setup {
-                ensure_installed = { 'clangd', 'lua_ls', 'dockerls'  },
+                ensure_installed = { 'clangd', 'lua_ls', 'dockerls', 'cmake' },
                 -- this will install whatever install with lspconfig.{lsp} automatically
                 -- TODO: There is a circular dependency between that and configuring the servers
                 automatic_installation = true,
@@ -39,14 +39,32 @@ return {
                 capabilities = vim.lsp.protocol.make_client_capabilities(),
                 init_options = {
                     clangdFileStatus = true,
-                    fallbackFlags = { "-std=c++17" },
+                    fallbackFlags = { "-std=c17" },
                 },
                 on_attach = function(client, bufnr)
                     -- Enable more capabilities or commands here if necessary
                 end,
+                settings = {
+                    -- Specify that .h files should be treated as C files
+                    ["clangd.filetypes"] = {
+                        c = { ".h" }
+                    }
+                }
             }
 
             lspconfig.dockerls.setup {}
+            lspconfig.pyright.setup {}
+            lspconfig.bitbake_ls.setup {}
+
+            -- CMake Language Server
+            lspconfig.cmake.setup {
+                cmd = { "cmake-language-server" },
+                filetypes = { "cmake" },
+                root_dir = lspconfig.util.root_pattern("CMakeLists.txt", ".git"),
+                init_options = {
+                    buildDirectory = "build",
+                },
+            }
 
             -- Global mappings.
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions

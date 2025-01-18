@@ -10,6 +10,7 @@ return {
          'L3MON4D3/LuaSnip',
          'saadparwaiz1/cmp_luasnip',
          'onsails/lspkind.nvim',
+         "rafamadriz/friendly-snippets",
         },
         config = function()
             -- Set up nvim-cmp.
@@ -51,6 +52,7 @@ return {
                     { name = 'luasnip' }, -- For luasnip users.
                 }, {
                     { name = 'buffer', keyword_length = 5 },
+                    { name = 'path' },
                 }),
                 formatting = {
                     format = lspkind.cmp_format({
@@ -97,6 +99,9 @@ return {
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
             require('lspconfig')['clangd'].setup {
+                capabilities = capabilities
+            }
+            require('lspconfig')['cmake'].setup {
                 capabilities = capabilities
             }
         end,

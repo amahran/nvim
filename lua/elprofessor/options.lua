@@ -48,7 +48,11 @@ local options = {
     colorcolumn = "80",
 
     -- (de)activate by :set (no)list to show white space characters
-    listchars = "tab:→ ,trail:·,space:·,eol:↲"
+    listchars = "tab:→ ,trail:·,space:·,eol:↲",
+
+    -- Enable project-specific config files
+    exrc = true,
+    secure = true
 }
 
 

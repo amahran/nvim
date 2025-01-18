@@ -1,6 +1,6 @@
 return {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.5',
+    -- tag = '0.1.5',
     dependencies = {
         'nvim-lua/plenary.nvim',
         { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -23,7 +23,7 @@ return {
         vim.keymap.set('n', '<leader>pf',  builtin.find_files, {})
         vim.keymap.set('n', '<C-g>',       builtin.git_files, {})
         vim.keymap.set('n', '<leader>ps',  builtin.live_grep, {})
-        vim.keymap.set('n', '<leader>fb',  builtin.buffers, {})
+        vim.keymap.set('n', '<leader>pb',  builtin.buffers, {})
         -- search for the word under the cursor
         vim.keymap.set('n', '<leader>pws', builtin.grep_string, {})
         vim.keymap.set('n', '<leader>pWs', function()
