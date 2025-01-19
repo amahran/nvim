@@ -2,21 +2,21 @@ return {
     {
         'hrsh7th/nvim-cmp',
         dependencies = {
-		 'hrsh7th/cmp-buffer',
-		 'hrsh7th/cmp-nvim-lsp',
-		 'neovim/nvim-lspconfig',
-		 'hrsh7th/cmp-cmdline',
-		 'hrsh7th/cmp-path',
-         'L3MON4D3/LuaSnip',
-         'saadparwaiz1/cmp_luasnip',
-         'onsails/lspkind.nvim',
-         "rafamadriz/friendly-snippets",
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-nvim-lsp',
+            'neovim/nvim-lspconfig',
+            'hrsh7th/cmp-cmdline',
+            'hrsh7th/cmp-path',
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
+            'onsails/lspkind.nvim',
+            "rafamadriz/friendly-snippets",
         },
         config = function()
             -- Set up nvim-cmp.
-            local cmp = require'cmp'
+            local cmp = require 'cmp'
             local lspkind = require('lspkind')
-            local luasnip = require'luasnip'
+            local luasnip = require 'luasnip'
 
             cmp.setup({
                 snippet = {
@@ -54,18 +54,22 @@ return {
                     { name = 'buffer', keyword_length = 5 },
                     { name = 'path' },
                 }),
-                formatting = {
-                    format = lspkind.cmp_format({
-                        mode = "symbol_text",
-                        menu = ({
-                            buffer = "[Buffer]",
-                            nvim_lsp = "[LSP]",
-                            luasnip = "[LuaSnip]",
-                            nvim_lua = "[Lua]",
-                            latex_symbols = "[Latex]",
-                        })
-                    }),
-                },
+                cmp.setup({
+                    formatting = {
+                        fields = { cmp.ItemField.Abbr, cmp.ItemField.Kind, cmp.ItemField.Menu },
+                        expandable_indicator = true,
+                        format = lspkind.cmp_format({
+                            mode = "symbol_text",
+                            menu = {
+                                buffer = "[Buffer]",
+                                nvim_lsp = "[LSP]",
+                                luasnip = "[LuaSnip]",
+                                nvim_lua = "[Lua]",
+                                latex_symbols = "[Latex]",
+                            },
+                        }),
+                    },
+                })
             })
 
             -- Set configuration for specific filetype.
@@ -107,4 +111,3 @@ return {
         end,
     },
 }
-
