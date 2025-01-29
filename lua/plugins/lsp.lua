@@ -6,32 +6,36 @@ return {
                 'williamboman/mason.nvim',
                 config = true,
             },
+            { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
+            { 'williamboman/mason-lspconfig.nvim' },
+            { 'folke/neodev.nvim' }, -- for bringing up the vim api
             {
-                'williamboman/mason-lspconfig.nvim',
+                'stevearc/conform.nvim',
                 config = function()
-                    require('mason-lspconfig').setup {
-                        -- ensure_installed = { 'clangd', 'lua_ls'  },
-                        -- this will install whatever install with lspconfig.{lsp} automatically
-                        -- TODO: There is a circular dependency between that and configuring the servers
-                        automatic_installation = true,
-                    }
+                    require('conform').setup({
+                        formatters_by_ft = {
+                            cmake = { "cmake_format" },
+                        },
+                        default_format_opts = {
+                            lsp_format = "fallback",
+                        },
+                    })
                 end,
-            },
-            {
-                'folke/neodev.nvim', -- for bringing up the vim api
-            },
+            }
+
         },
         config = function()
+            require('mason-tool-installer').setup {
+                -- cmakelang provide cmake-format and other tools for cmake lsp
+                ensure_installed = { 'cmakelang' },
+            }
             require('mason-lspconfig').setup {
                 ensure_installed = { 'clangd', 'lua_ls', 'dockerls', 'cmake' },
-                -- this will install whatever install with lspconfig.{lsp} automatically
-                -- TODO: There is a circular dependency between that and configuring the servers
                 automatic_installation = true,
             }
             require('neodev').setup()
             -- Setup language servers.
             local lspconfig = require('lspconfig')
-            lspconfig.lua_ls.setup {}
             lspconfig.clangd.setup {
                 cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
                 filetypes = { "c", "cpp", "objc", "objcpp" },
@@ -39,11 +43,8 @@ return {
                 capabilities = vim.lsp.protocol.make_client_capabilities(),
                 init_options = {
                     clangdFileStatus = true,
-                    fallbackFlags = { "-std=c17" },
+                    fallbackFlags = { "-std=c11" },
                 },
-                on_attach = function(client, bufnr)
-                    -- Enable more capabilities or commands here if necessary
-                end,
                 settings = {
                     -- Specify that .h files should be treated as C files
                     ["clangd.filetypes"] = {
@@ -51,20 +52,11 @@ return {
                     }
                 }
             }
-
+            lspconfig.lua_ls.setup {}
             lspconfig.dockerls.setup {}
             lspconfig.pyright.setup {}
             lspconfig.bitbake_ls.setup {}
-
-            -- CMake Language Server
-            lspconfig.cmake.setup {
-                cmd = { "cmake-language-server" },
-                filetypes = { "cmake" },
-                root_dir = lspconfig.util.root_pattern("CMakeLists.txt", ".git"),
-                init_options = {
-                    buildDirectory = "build",
-                },
-            }
+            lspconfig.cmake.setup {}
 
             -- Global mappings.
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -106,7 +98,7 @@ return {
                     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
                     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
                     vim.keymap.set('n', '<leader>f', function()
-                        vim.lsp.buf.format { async = true }
+                        require('conform').format({ async = true })
                     end, opts)
                 end,
             })
