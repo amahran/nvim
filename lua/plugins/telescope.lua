@@ -19,9 +19,17 @@ return {
     },
     config = function()
         pcall(require('telescope').load_extension, 'fzf') -- load fzf
+        require('telescope').setup {
+            pickers = {
+                find_files = {
+                    -- theme = 'ivy'
+                }
+            }
+        }
         local builtin = require('telescope.builtin')
         vim.keymap.set('n', '<leader>pf',  builtin.find_files, {})
         vim.keymap.set('n', '<C-g>',       builtin.git_files, {})
+        vim.keymap.set('n', '<leader>gk',  builtin.git_bcommits, {})
         vim.keymap.set('n', '<leader>ps',  builtin.live_grep, {})
         vim.keymap.set('n', '<leader>pb',  builtin.buffers, {})
         -- search for the word under the cursor
