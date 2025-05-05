@@ -1,6 +1,12 @@
 -- Plugin setup using lazy.nvim
 return {
     {
+        "tjdevries/colorbuddy.nvim",
+        config = function()
+            require("colorbuddy").colorscheme("gruvbuddy")
+        end,
+    },
+    {
         'rebelot/kanagawa.nvim',
         -- this a callback function that will be only excuted by lazy after lazy 
         -- has downloaded the plugin and the plugin is ready to go
@@ -42,11 +48,13 @@ return {
         name = "rose-pine",
         config = function()
             require('rose-pine').setup({
+                variant = 'moon',
+                dark_variant = 'moon',
                 -- so that I don't lose my eyes in a single coding session
                 dim_inactive_windows = true,
                 styles = {
                     italic = false,
-                    transparency = true,
+                    transparency = false,
                 },
             })
             -- NOTE: setting the colorscheme has to come after configuring it
@@ -55,35 +63,38 @@ return {
         end,
     },
     {
-        "ellisonleao/gruvbox.nvim",
+        "catppuccin/nvim",
+        name = "catppuccin",
         priority = 1000,
         config = function()
-            require("gruvbox").setup({
-                terminal_colors = true, -- add neovim terminal colors
-                undercurl = true,
-                underline = true,
-                bold = true,
-                italic = {
-                    strings = false,
-                    emphasis = false,
-                    comments = false,
-                    operators = false,
-                    folds = false,
+            require("catppuccin").setup({
+                flavour = "mocha",
+                integrations = {
+                    cmp = true,
+                    gitsigns = true,
+                    nvimtree = true,
+                    telescope = true,
+                    treesitter = true,
+                    which_key = true,
+                    native_lsp = {
+                        enabled = true,
+                        underlines = {
+                            errors = { "undercurl" },
+                            hints = { "undercurl" },
+                            warnings = { "undercurl" },
+                            information = { "undercurl" },
+                        },
+                    },
                 },
-                strikethrough = true,
-                invert_selection = false,
-                invert_signs = false,
-                invert_tabline = false,
-                invert_intend_guides = false,
-                inverse = true, -- invert background for search, diffs, statuslines and errors
-                contrast = "soft", -- can be "hard", "soft" or empty string
-                palette_overrides = {},
-                overrides = {},
-                dim_inactive = false,
-                transparent_mode = true,
             })
-            -- vim.cmd("colorscheme gruvbox")
         end,
     },
+    {
+        "shaunsingh/nord.nvim",
+        priority = 1000,
+        config = function()
+            vim.cmd("colorscheme nord")
+        end,
+    }
 }
 
