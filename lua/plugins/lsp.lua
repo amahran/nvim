@@ -30,8 +30,7 @@ return {
                 ensure_installed = { 'cmakelang' },
             }
             require('mason-lspconfig').setup {
-                ensure_installed = { 'clangd', 'lua_ls', 'dockerls', 'cmake' },
-                automatic_installation = true,
+                ensure_installed = { 'clangd', 'lua_ls', 'dockerls', 'cmake', 'pyright' }
             }
             require('neodev').setup()
             -- Setup language servers.
