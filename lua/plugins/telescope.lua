@@ -3,34 +3,41 @@ return {
     -- tag = '0.1.5',
     dependencies = {
         'nvim-lua/plenary.nvim',
-        { -- If encountering errors, see telescope-fzf-native README for installation instructions
+        {
             'nvim-telescope/telescope-fzf-native.nvim',
-
-            -- `build` is used to run some command when the plugin is installed/updated.
-            -- This is only run then, not every time Neovim starts up.
-            build = 'make',
-
-            -- `cond` is a condition used to determine whether this plugin should be
-            -- installed and loaded.
-            cond = function()
-                return vim.fn.executable 'make' == 1
-            end,
+            build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
         },
+        "nvim-telescope/telescope-live-grep-args.nvim",
     },
     config = function()
-        pcall(require('telescope').load_extension, 'fzf') -- load fzf
+        require('telescope').load_extension('fzf')
+        require('telescope').load_extension('live_grep_args')
         require('telescope').setup {
-            pickers = {
-                find_files = {
-                    -- theme = 'ivy'
-                }
-            }
+            defaults = {
+                file_ignore_patterns = {
+                    "%.git",
+                },
+                extensions = {
+                    fzf = {}
+                },
+                -- vimgrep_arguments = {
+                --     "rg",
+                --     "--color=never",
+                --     "--no-heading",
+                --     "--with-filename",
+                --     "--line-number",
+                --     "--column",
+                --     "--smart-case",
+                --     "--hidden",
+                --     -- "--no-ignore",  -- optional
+                -- },
+            },
         }
         local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>pf',  builtin.find_files, {})
+        vim.keymap.set('n', '<leader>pf',  function() builtin.find_files({ hidden = true }) end, {})
         vim.keymap.set('n', '<C-g>',       builtin.git_files, {})
         vim.keymap.set('n', '<leader>gk',  builtin.git_bcommits, {})
-        vim.keymap.set('n', '<leader>ps',  builtin.live_grep, {})
+        vim.keymap.set('n', '<leader>ps',  ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
         vim.keymap.set('n', '<leader>pb',  builtin.buffers, {})
         -- search for the word under the cursor
         vim.keymap.set('n', '<leader>pws', builtin.grep_string, {})
@@ -53,5 +60,12 @@ return {
         vim.keymap.set('n', '<leader>ns', function()
             builtin.find_files { cwd = vim.fn.stdpath 'config' }
         end, { desc = '[S]earch [N]eovim files' })
+
+        -- Shortcut for searching your todo files
+        vim.keymap.set("n", "<C-e>", function()
+            require("telescope.builtin").find_files {
+                search_dirs = { vim.fn.expand("~/work/todo"), vim.fn.expand("~/personal/todo") },
+            }
+        end)
     end,
 }
