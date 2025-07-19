@@ -25,4 +25,5 @@ return {
         end,
         ft = { "markdown" },
     },
+    { "lambdalisue/vim-suda" },
 }
