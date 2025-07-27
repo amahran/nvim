@@ -24,5 +24,5 @@ require('elprofessor/lazy')
 -- })
 --
 -- Apply initial color scheme
-vim.cmd.colorscheme('rose-pine')
+vim.cmd.colorscheme('kanagawa')
 

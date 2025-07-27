@@ -4,6 +4,7 @@ return {
         'rush-rs/tree-sitter-asm', -- for asm parser as claimed TODO needs testing
         'nvim-treesitter/nvim-treesitter-textobjects',
     },
+    build = ":TSUpdate",
     config = function()
         -- A list of parser names, or 'all' (the five listed parsers should always be installed)
         local core = { 'c', 'lua', 'vim', 'vimdoc', 'query' }

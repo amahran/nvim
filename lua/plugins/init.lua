@@ -15,15 +15,19 @@ return {
             vim.keymap.set('n', '<leader>gs', '<cmd>Git<cr>')
         end,
     },
-    { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        build = "cd app && yarn install",
-        init = function()
-            vim.g.mkdp_filetypes = { "markdown" }
-        end,
-        ft = { "markdown" },
-    },
     { "lambdalisue/vim-suda" },
+    {
+        "toppair/peek.nvim",
+        event = { "VeryLazy" },
+        build = "deno task --quiet build:fast",
+        config = function()
+            require("peek").setup({
+                filetype = { 'markdown' },
+            })
+            vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+            vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+
+            local peek = require('peek')
+        end,
+    },
 }

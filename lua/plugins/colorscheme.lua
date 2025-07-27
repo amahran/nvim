@@ -48,8 +48,8 @@ return {
         name = "rose-pine",
         config = function()
             require('rose-pine').setup({
-                variant = 'moon',
-                dark_variant = 'moon',
+                variant = 'main',
+                dark_variant = 'main',
                 -- so that I don't lose my eyes in a single coding session
                 dim_inactive_windows = true,
                 styles = {
@@ -93,8 +93,21 @@ return {
         "shaunsingh/nord.nvim",
         priority = 1000,
         config = function()
-            vim.cmd("colorscheme nord")
+            -- vim.cmd("colorscheme nord")
         end,
+    },
+    {
+        "Mofiqul/adwaita.nvim",
+        lazy = false,
+        priority = 1000,
+
+        -- configure and set on startup
+        config = function()
+            -- vim.g.adwaita_darker = true             -- for darker version
+            -- vim.g.adwaita_disable_cursorline = true -- to disable cursorline
+            -- vim.g.adwaita_transparent = true        -- makes the background transparent
+            -- vim.cmd('colorscheme adwaita')
+        end
     }
 }
 
