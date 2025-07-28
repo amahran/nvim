@@ -1,4 +1,5 @@
 return {
+    { 'tpope/vim-surround' },
     {
         'mbbill/undotree',
         config = function()
