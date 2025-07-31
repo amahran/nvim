@@ -1,14 +1,8 @@
 -- Plugin setup using lazy.nvim
 return {
     {
-        "tjdevries/colorbuddy.nvim",
-        config = function()
-            require("colorbuddy").colorscheme("gruvbuddy")
-        end,
-    },
-    {
         'rebelot/kanagawa.nvim',
-        -- this a callback function that will be only excuted by lazy after lazy 
+        -- this a callback function that will be only excuted by lazy after lazy
         -- has downloaded the plugin and the plugin is ready to go
         -- so that we avoid async execution problems of the configurations
         -- e.g. lazy is downloading yet the plugin and meanwhile, the command for setting
@@ -37,7 +31,7 @@ return {
                     variables = {},
                     -- Background styles. Can be "dark", "transparent" or "normal"
                     sidebars = "dark", -- style for sidebars, see below
-                    floats = "dark", -- style for floating windows
+                    floats = "dark",   -- style for floating windows
                 },
                 dim_inactive = true,
             })
@@ -73,7 +67,7 @@ return {
                     cmp = true,
                     gitsigns = true,
                     nvimtree = true,
-                    telescope = true,
+                    -- telescope = true,
                     treesitter = true,
                     which_key = true,
                     native_lsp = {
@@ -89,25 +83,4 @@ return {
             })
         end,
     },
-    {
-        "shaunsingh/nord.nvim",
-        priority = 1000,
-        config = function()
-            -- vim.cmd("colorscheme nord")
-        end,
-    },
-    {
-        "Mofiqul/adwaita.nvim",
-        lazy = false,
-        priority = 1000,
-
-        -- configure and set on startup
-        config = function()
-            -- vim.g.adwaita_darker = true             -- for darker version
-            -- vim.g.adwaita_disable_cursorline = true -- to disable cursorline
-            -- vim.g.adwaita_transparent = true        -- makes the background transparent
-            -- vim.cmd('colorscheme adwaita')
-        end
-    }
 }
-

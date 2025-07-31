@@ -1,14 +1,14 @@
 -- setup lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then -- if the lazypath doesn't exist on the system
-  vim.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
+    vim.system({
+        'git',
+        'clone',
+        '--filter=blob:none',
+        'https://github.com/folke/lazy.nvim.git',
+        '--branch=stable', -- latest stable release
+        lazypath,
+    })
 end
 
 -- say opening a cpp file, nvim goes through
@@ -19,7 +19,7 @@ end
 -- prepend: add to the beginning of the list, other option is append
 vim.opt.rtp:prepend(lazypath)
 
-opts = {
+local opts = {
     change_detection = {
         notify = false,
     }
@@ -30,4 +30,3 @@ opts = {
 -- and if there is an init.lua there, it's gonna
 -- run this file
 require('lazy').setup('plugins', opts)
-
