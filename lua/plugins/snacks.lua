@@ -22,21 +22,23 @@ return {
                 cmd = 'rg'
             },
         },
-        quickfile = { enabled = true },
+        -- This thing cause rendering problems when opening files
+        -- quickfile = { enabled = true },
         scope = { enabled = true },
     },
     keys = {
         -- find
-        { "<leader>ns",  function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-        { "<leader>pf",  function() Snacks.picker.files() end,                                   desc = "Find Files" },
-        { "<C-g>",       function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
+        { "<leader>ns",  function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,                                             desc = "Find Config File" },
+        { "<leader>pf",  function() Snacks.picker.files() end,                                                                               desc = "Find Files" },
+        { "<C-g>",       function() Snacks.picker.git_files() end,                                                                           desc = "Find Git Files" },
         -- Grep
-        { "<leader>ps",  function() Snacks.picker.grep() end,                                    desc = "Grep" },
-        { "<leader>pws", function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>ps",  function() Snacks.picker.grep() end,                                                                                desc = "Grep" },
+        { "<leader>pws", function() Snacks.picker.grep_word() end,                                                                           desc = "Visual selection or word", mode = { "n", "x" } },
         -- search
-        { "<leader>pd",  function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
-        { "<leader>sr",  function() Snacks.picker.resume() end, desc = "Resume" },
-        { "<C-e>",       function () Snacks.picker.files({ dirs = {vim.fn.expand("~/work/todo"), vim.fn.expand("~/personal/todo/")}  })  end, desc = "fzf todo files"},
+        -- { "<leader>pd",  function() Snacks.picker.diagnostics() end,                                                                         desc = "Diagnostics" },
+        { "<leader>nh", function() Snacks.picker.help() end, desc = "Help Pages" },
+        { "<leader>sr",  function() Snacks.picker.resume() end,                                                                              desc = "Resume" },
+        { "<M-e>",       function() Snacks.picker.files({ dirs = { vim.fn.expand("~/work/todo"), vim.fn.expand("~/personal/todo/") } }) end, desc = "fzf todo files" },
         --         vim.keymap.set('n', '<leader>pWs', function()
         --             local word = vim.fn.expand("<cWORD>")
         --             builtin.grep_string({ search = word })

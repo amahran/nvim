@@ -1,3 +1,5 @@
+-- nvim-lspconfig names
+-- get from :h lspconfig-all
 local servers = {
     clangd = {
         cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
@@ -57,6 +59,7 @@ return {
         opts = {
             formatters_by_ft = {
                 cmake = { "cmake_format" },
+                python = { "black" },
             },
             default_format_opts = {
                 lsp_format = "fallback",
@@ -66,7 +69,6 @@ return {
     {
         'neovim/nvim-lspconfig',
         config = function()
-            -- servers names are the nvim-lspconfig names
             for name, server_opts in pairs(servers) do
                 server_opts.capabilities = vim.lsp.protocol.make_client_capabilities()
                 vim.lsp.config(name, server_opts)
@@ -78,7 +80,7 @@ return {
             vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
             vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end)
             vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end)
-            vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+            vim.keymap.set('n', '<leader>pd', vim.diagnostic.setqflist)
             -- Use LspAttach autocommand to only map the following keys
             -- after the language server attaches to the current buffer
             vim.api.nvim_create_autocmd('LspAttach', {

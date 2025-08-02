@@ -52,7 +52,10 @@ local options = {
 
     -- Enable project-specific config files
     exrc = true,
-    secure = true
+    secure = true,
+
+    -- floating windows boarder
+    winborder = 'rounded',
 }
 
 
