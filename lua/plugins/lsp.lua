@@ -68,9 +68,12 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
+        dependencies = { 'saghen/blink.cmp' },
         config = function()
             for name, server_opts in pairs(servers) do
                 server_opts.capabilities = vim.lsp.protocol.make_client_capabilities()
+                -- server_opts.capabilities = require('blink.cmp').get_lsp_capabilities(server_opts.capabilities)
+                server_opts.capabilities = vim.tbl_deep_extend('force', server_opts.capabilities, require('blink.cmp').get_lsp_capabilities())
                 vim.lsp.config(name, server_opts)
                 vim.lsp.enable(name)
             end

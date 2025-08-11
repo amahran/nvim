@@ -30,6 +30,7 @@ return {
         -- find
         { "<leader>ns",  function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,                                             desc = "Find Config File" },
         { "<leader>pf",  function() Snacks.picker.files() end,                                                                               desc = "Find Files" },
+        { "<leader>ob",  function() Snacks.picker.buffers() end,                                                                             desc = "Find Files" },
         { "<C-g>",       function() Snacks.picker.git_files() end,                                                                           desc = "Find Git Files" },
         -- Grep
         { "<leader>ps",  function() Snacks.picker.grep() end,                                                                                desc = "Grep" },

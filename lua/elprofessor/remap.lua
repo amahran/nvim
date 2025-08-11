@@ -62,3 +62,27 @@ map.set("c", "%%", function()
         return '%%'
     end
 end, { expr = true })
+
+-- scratch buffers
+local scratch_bufnr = nil
+
+vim.keymap.set("n", "<leader>.", function()
+  if scratch_bufnr and vim.api.nvim_buf_is_valid(scratch_bufnr) then
+    -- If scratch buffer still exists, switch to it
+    local win = vim.fn.bufwinid(scratch_bufnr)
+    if win ~= -1 then
+      vim.api.nvim_set_current_win(win)
+    else
+      vim.cmd("buffer " .. scratch_bufnr)
+    end
+  else
+    -- Create a new scratch buffer
+    vim.cmd("enew")
+    vim.bo.buftype = "nofile"
+    vim.bo.bufhidden = "hide"
+    vim.bo.swapfile = false
+    vim.bo.modifiable = true
+    vim.bo.readonly = false
+    scratch_bufnr = vim.api.nvim_get_current_buf()
+  end
+end, { desc = "Open or switch to scratch buffer" })
