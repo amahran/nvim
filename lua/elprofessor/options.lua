@@ -66,6 +66,7 @@ vim.opt.isfname:append("@-@") -- add @ as a valid character if it does appear in
 
 -- global option affects all buffers, windows and tabs
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- netrw
 vim.g.netrw_browse_split = 0

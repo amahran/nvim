@@ -42,7 +42,7 @@ map.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 map.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 -- replace the word under the cusrsor command
-map.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+map.set("n", "<leader>cw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 -- make the file of the current buffer executable
 map.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
 map.set("n", "<leader>X", "<cmd>!chmod -x %<cr>", { silent = true })
@@ -65,7 +65,6 @@ end, { expr = true })
 
 -- scratch buffers
 local scratch_bufnr = nil
-
 vim.keymap.set("n", "<leader>.", function()
   if scratch_bufnr and vim.api.nvim_buf_is_valid(scratch_bufnr) then
     -- If scratch buffer still exists, switch to it
@@ -86,3 +85,6 @@ vim.keymap.set("n", "<leader>.", function()
     scratch_bufnr = vim.api.nvim_get_current_buf()
   end
 end, { desc = "Open or switch to scratch buffer" })
+
+-- what else would you do with the history window other than search
+map.set('n', 'q:', 'q:?')

@@ -5,7 +5,11 @@ return {
 
         version = '1.*',
         opts = {
-            keymap = { preset = 'default' },
+            keymap = {
+                preset = 'default',
+                ['<C-k>'] = false, -- to keep digraphs working in insert mode
+                ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
+            },
             appearance = {
                 nerd_font_variant = 'mono'
             },
