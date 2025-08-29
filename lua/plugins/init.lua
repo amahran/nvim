@@ -1,6 +1,15 @@
 return {
     { 'tpope/vim-surround' },
     {
+        'mg979/vim-visual-multi',
+        init = function()
+            -- Define custom mappings with Alt
+            vim.g.VM_maps = {
+                ["Find Under"] = "<A-n>",         -- select word under cursor
+            }
+        end,
+    },
+    {
         'mbbill/undotree',
         config = function()
             vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)

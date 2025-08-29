@@ -87,4 +87,5 @@ vim.keymap.set("n", "<leader>.", function()
 end, { desc = "Open or switch to scratch buffer" })
 
 -- what else would you do with the history window other than search
-map.set('n', 'q:', 'q:?')
+-- map.set('n', 'q:', 'q:?')
+

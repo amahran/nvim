@@ -2,6 +2,7 @@
 return {
     {
         "vague2k/vague.nvim",
+        enabled = false,
         priority = 1000,
         opts = {
             italic = false,
@@ -18,6 +19,7 @@ return {
     },
     {
         "folke/tokyonight.nvim",
+        enabled = false,
         lazy = false,
         priority = 1000,
         opts = {
@@ -38,6 +40,7 @@ return {
     },
     {
         'rose-pine/neovim',
+        enabled = false,
         name = "rose-pine",
         opts = {
             variant = 'main',
@@ -52,6 +55,7 @@ return {
     },
     {
         "catppuccin/nvim",
+        enabled = false,
         name = "catppuccin",
         priority = 1000,
         opts = {
