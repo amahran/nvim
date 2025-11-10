@@ -35,10 +35,10 @@ return {
                 enable = true,
                 -- those are global keymaps
                 keymaps = {
-                    init_selection = "<leader>ss", -- This also can be started by entering visual line mode
-                    node_incremental = "<leader>si",
-                    scope_incremental = "<leader>sc",
-                    node_decremental = "<leader>sd",
+                    init_selection = "<C-space>", -- This also can be started by entering visual line mode
+                    node_incremental = "<C-space>",
+                    scope_incremental = "false",
+                    node_decremental = "<bs>",
                 },
             },
             indent = {

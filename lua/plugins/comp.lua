@@ -8,13 +8,16 @@ return {
             keymap = {
                 preset = 'default',
                 ['<C-k>'] = false, -- to keep digraphs working in insert mode
-                ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
+                ['<C-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
             },
             appearance = {
                 nerd_font_variant = 'mono'
             },
             sources = {
                 default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+                per_filetype = {
+                    org = { 'orgmode' }
+                },
                 providers = {
                     buffer = {
                         min_keyword_length = 5,

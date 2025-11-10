@@ -7,7 +7,11 @@ map.set("n", "<leader>pv", vim.cmd.Ex)
 map.set("v", "J", ":m '>+1<CR>gv=gv")
 map.set("v", "K", ":m '<-2<CR>gv=gv")
 
-map.set("n", "J", "mzJ`z") -- keep the cursor in place when joining lines
+-- keep the cursor in place when joining lines
+-- map.set("n", "J", "mzJ`z") 
+map.set("n", "J", function()
+    vim.cmd("normal! mz" .. vim.v.count1 .. "J`z")
+end)
 
 -- always keep the cursor in the middle when half page scrolling
 -- or navigating between the search hits
@@ -89,3 +93,7 @@ end, { desc = "Open or switch to scratch buffer" })
 -- what else would you do with the history window other than search
 -- map.set('n', 'q:', 'q:?')
 
+-- map C-backspace to C-w
+-- it's C-h because that's what nvim receives from the terminal
+-- to know that; in insert mode enter <C-v><C-backspace>, the result is ^H
+map.set("i", "<C-h>", "<C-w>")

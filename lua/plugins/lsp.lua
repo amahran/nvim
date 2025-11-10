@@ -2,10 +2,10 @@
 -- get from :h lspconfig-all
 local servers = {
     clangd = {
-        cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
+        cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename", "--fallback-style=google", },
         init_options = {
             clangdFileStatus = true,
-            fallbackFlags = { "-std=c11" },
+            -- fallbackFlags = { "-std=c11" },
         },
         settings = {
             ["clangd.filetypes"] = {
@@ -60,6 +60,7 @@ return {
             formatters_by_ft = {
                 cmake = { "cmake_format" },
                 python = { "black" },
+                sh = { "shfmt" },
             },
             default_format_opts = {
                 lsp_format = "fallback",
@@ -105,7 +106,7 @@ return {
                     -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts) -- default is grn
                     -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts) -- default is gra
                     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                    vim.keymap.set('n', '<leader>fm', function()
+                    vim.keymap.set({'n', 'v'}, '<leader>fm', function()
                         require('conform').format({ async = true })
                     end, opts)
                     -- not sure what am I doing with those!
