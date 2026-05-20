@@ -1,12 +1,15 @@
+-- Load core settings first (these have no plugin dependencies)
 require('elprofessor/options')
 require('elprofessor/remap')
-require('elprofessor/lazy')
 
-vim.cmd.colorscheme('kanagawa')
+-- Install and load all plugins via vim.pack
+require('elprofessor/pack')
 
--- vim.api.nvim_create_autocmd("TextYankPost", {
---   callback = function()
---     vim.highlight.on_yank { higroup = "Visual", timeout = 50 }
---   end,
--- })
-
+-- Configure plugins (order matters: colorscheme first, then LSP deps, then the rest)
+require('config/colorscheme')
+require('config/treesitter')
+require('config/lsp')
+require('config/completion')
+require('config/dap')
+require('config/snacks')
+require('config/misc')

@@ -1,11 +1,9 @@
--- nvim-lspconfig names
--- get from :h lspconfig-all
+-- nvim-lspconfig names (see :h lspconfig-all)
 local servers = {
     clangd = {
-        cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename", "--fallback-style=google", },
+        cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename", "--fallback-style=google" },
         init_options = {
             clangdFileStatus = true,
-            -- fallbackFlags = { "-std=c11" },
         },
         settings = {
             ["clangd.filetypes"] = {
@@ -14,7 +12,7 @@ local servers = {
         },
     },
     bitbake_language_server = {
-        cmd = { "language-server-bitbake" }, -- somebody screw up the command name upstream
+        cmd = { "language-server-bitbake" },
     },
     lua_ls = {},
     dockerls = {},
@@ -22,115 +20,77 @@ local servers = {
     neocmake = {},
 }
 
-return {
-    {
-        'mason-org/mason-lspconfig.nvim',
-        dependencies = {
-            'mason-org/mason.nvim',
-            opts = {},
-        },
-        opts = function(_, opts)
-            servers.bitbake_language_server = nil -- that is not supported in mason-lspconfig
-            local ensure_installed = vim.tbl_keys(servers)
-            opts.ensure_installed = ensure_installed
-        end,
-    },
-    {
-        'WhoIsSethDaniel/mason-tool-installer.nvim',
-        opts = {
-            -- tools besides LSPs
-            -- bitbake is here because it's not supported by mason-lspconfig
-            ensure_installed = { 'cmakelang', 'language-server-bitbake' },
-        },
+-- Mason: install LSP servers and tools
+require('mason').setup()
 
-    },
-    { -- provides vim API
-        "folke/lazydev.nvim",
-        ft = "lua",
-        opts = {
-            library = {
-                -- Load luvit types when the `vim.uv` word is found
-                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-            },
-        },
-    },
-    {
-        'stevearc/conform.nvim',
-        opts = {
-            formatters_by_ft = {
-                cmake = { "cmake_format" },
-                python = { "black" },
-                sh = { "shfmt" },
-            },
-            default_format_opts = {
-                lsp_format = "fallback",
-            },
-        }
-    },
-    {
-        'neovim/nvim-lspconfig',
-        dependencies = { 'saghen/blink.cmp' },
-        config = function()
-            for name, server_opts in pairs(servers) do
-                server_opts.capabilities = vim.lsp.protocol.make_client_capabilities()
-                -- server_opts.capabilities = require('blink.cmp').get_lsp_capabilities(server_opts.capabilities)
-                server_opts.capabilities = vim.tbl_deep_extend('force', server_opts.capabilities, require('blink.cmp').get_lsp_capabilities())
-                vim.lsp.config(name, server_opts)
-                vim.lsp.enable(name)
-            end
+-- mason-lspconfig: auto-install LSP servers
+-- (bitbake is not supported by mason-lspconfig, handled separately)
+local mason_servers = vim.tbl_keys(servers)
+-- remove bitbake from mason list
+mason_servers = vim.tbl_filter(function(s) return s ~= 'bitbake_language_server' end, mason_servers)
+require('mason-lspconfig').setup({
+    ensure_installed = mason_servers,
+})
 
-            -- Global mappings.
-            -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-            vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-            vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end)
-            vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end)
-            vim.keymap.set('n', '<leader>pd', vim.diagnostic.setqflist)
-            -- Use LspAttach autocommand to only map the following keys
-            -- after the language server attaches to the current buffer
-            vim.api.nvim_create_autocmd('LspAttach', {
-                group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-                callback = function(event)
-                    -- Enable completion triggered by <c-x><c-o>
-                    -- TODO this might not be really needed with nvim.cmp installed
-                    vim.bo[event.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+-- mason-tool-installer: tools besides LSPs
+require('mason-tool-installer').setup({
+    ensure_installed = { 'cmakelang', 'language-server-bitbake', 'black', 'shfmt' },
+})
 
-                    -- Buffer local mappings.
-                    -- See `:help vim.lsp.*` for documentation on any of the below functions
-                    local opts = { buffer = event.buf }
-                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-                    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- same as default
-                    -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)  -- default is gri
-                    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts) -- default is <C-s>
-                    -- vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts) -- default is grt
-                    -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts) -- default is grn
-                    -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts) -- default is gra
-                    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                    vim.keymap.set({'n', 'v'}, '<leader>fm', function()
-                        require('conform').format({ async = true })
-                    end, opts)
-                    -- not sure what am I doing with those!
-                    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-                    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-                    vim.keymap.set('n', '<leader>wl', function()
-                        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                    end, opts)
-                end,
-            })
-        end,
+-- lazydev: provides vim API completions for Lua
+require('lazydev').setup({
+    library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        "nvim-dap-ui",
     },
-    -- {
-    --     'p00f/clangd_extensions.nvim',
-    --     config = function()
-    --         require("clangd_extensions").setup {
-    --             server = {
-    --                 cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename" },
-    --                 filetypes = { "c", "cpp", "objc", "objcpp" },
-    --             },
-    --             extensions = {
-    --                 autoSetHints = true,
-    --             },
-    --         }
-    --     end,
-    -- }
-}
+})
+
+-- conform: formatting
+require('conform').setup({
+    formatters_by_ft = {
+        cmake = { "cmake_format" },
+        python = { "black" },
+        sh = { "shfmt" },
+    },
+    default_format_opts = {
+        lsp_format = "fallback",
+    },
+})
+
+-- LSP server configuration
+for name, server_opts in pairs(servers) do
+    server_opts.capabilities = vim.lsp.protocol.make_client_capabilities()
+    server_opts.capabilities = vim.tbl_deep_extend(
+        'force',
+        server_opts.capabilities,
+        require('blink.cmp').get_lsp_capabilities()
+    )
+    vim.lsp.config(name, server_opts)
+    vim.lsp.enable(name)
+end
+
+-- Diagnostic keymaps
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end)
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end)
+vim.keymap.set('n', '<leader>pd', vim.diagnostic.setqflist)
+
+-- LSP keymaps (only after server attaches)
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(event)
+        vim.bo[event.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+        local opts = { buffer = event.buf }
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
+            require('conform').format({ async = true })
+        end, opts)
+        vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+        vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+        vim.keymap.set('n', '<leader>wl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, opts)
+    end,
+})
