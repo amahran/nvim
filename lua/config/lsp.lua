@@ -34,7 +34,7 @@ require('mason-lspconfig').setup({
 
 -- mason-tool-installer: tools besides LSPs
 require('mason-tool-installer').setup({
-    ensure_installed = { 'cmakelang', 'language-server-bitbake', 'black', 'shfmt' },
+    ensure_installed = { 'cmakelang', 'language-server-bitbake', 'black', 'shfmt', 'mbake' },
 })
 
 -- lazydev: provides vim API completions for Lua
@@ -51,11 +51,28 @@ require('conform').setup({
         cmake = { "cmake_format" },
         python = { "black" },
         sh = { "shfmt" },
+        make = { "mbake" },
+    },
+    formatters = {
+        -- conform has no builtin for mbake, so define it here.
+        -- --stdin reads the buffer and writes to stdout; preferred over passing
+        -- $FILENAME, which makes mbake rewrite the file in place (and strip the
+        -- trailing newline). mbake picks up ./.bake.toml, else ~/.config/bake.toml.
+        mbake = {
+            command = "mbake",
+            args = { "format", "--stdin" },
+        },
     },
     default_format_opts = {
         lsp_format = "fallback",
     },
 })
+
+-- Formatting keymap. Deliberately global rather than in LspAttach: filetypes
+-- with a conform formatter but no language server (e.g. make) get no LspAttach.
+vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
+    require('conform').format({ async = true })
+end)
 
 -- LSP server configuration
 for name, server_opts in pairs(servers) do
@@ -84,9 +101,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         local opts = { buffer = event.buf }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
-            require('conform').format({ async = true })
-        end, opts)
         vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
         vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
         vim.keymap.set('n', '<leader>wl', function()

@@ -72,3 +72,14 @@ vim.g.maplocalleader = ' '
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
+
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "c", "cpp", "h" },
+    callback = function()
+        vim.bo.shiftwidth = 2
+        vim.bo.tabstop = 2
+        vim.bo.softtabstop = 2
+        vim.bo.expandtab = true
+    end,
+})
