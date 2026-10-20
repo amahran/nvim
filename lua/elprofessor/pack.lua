@@ -10,9 +10,10 @@ vim.pack.add({
     'https://github.com/rebelot/kanagawa.nvim',
     -- 'https://github.com/vague2k/vague.nvim',
     -- 'https://github.com/folke/tokyonight.nvim',
-    -- 'https://github.com/rose-pine/neovim',
+    'https://github.com/rose-pine/neovim',
     -- 'https://github.com/catppuccin/nvim',
     -- 'https://github.com/navarasu/onedark.nvim',
+    'https://github.com/projekt0n/github-nvim-theme',
 
     -- Completion
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1') },

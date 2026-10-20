@@ -8,7 +8,45 @@ dap.adapters.gdb = {
     args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
 }
 
+-- gdb's own stdin is the DAP pipe, so a launched program that reads stdin
+-- sees EOF immediately. This adapter opens a terminal split and points the
+-- inferior's stdin/stdout at its pty instead.
+local tty_term = nil
+dap.adapters.gdb_tty = function(callback)
+    vim.cmd('botright 12split | enew')
+    local chan = vim.fn.jobstart({ 'sleep', 'infinity' }, { term = true })
+    tty_term = { chan = chan, buf = vim.api.nvim_get_current_buf() }
+    local tty = vim.api.nvim_get_chan_info(chan).pty
+    vim.cmd('wincmd p')
+    callback({
+        type = 'executable',
+        command = 'gdb',
+        args = { '--interpreter=dap', '--eval-command', 'set print pretty on',
+                 '--eval-command', 'set inferior-tty ' .. tty },
+    })
+end
+local function close_tty_term()
+    if tty_term then
+        vim.fn.jobstop(tty_term.chan)
+        pcall(vim.api.nvim_buf_delete, tty_term.buf, { force = true })
+        tty_term = nil
+    end
+end
+dap.listeners.after.event_terminated.tty_term = close_tty_term
+dap.listeners.after.event_exited.tty_term = close_tty_term
+
 dap.configurations.c = {
+    {
+        name = "Launch (interactive stdin)",
+        type = "gdb_tty",
+        request = "launch",
+        program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        args = {},
+        cwd = "${workspaceFolder}",
+        stopAtBeginningOfMainSubprogram = false,
+    },
     {
         name = "Launch",
         type = "gdb",
