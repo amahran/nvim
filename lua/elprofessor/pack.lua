@@ -49,9 +49,6 @@ vim.pack.add({
 
     -- Utilities
     'https://github.com/lambdalisue/vim-suda',
-
-    -- Markdown preview (requires deno)
-    'https://github.com/toppair/peek.nvim',
 })
 
 -- Handle post-install/update hooks
@@ -65,11 +62,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
                 vim.cmd.packadd('nvim-treesitter')
             end
             vim.cmd('TSUpdate')
-        end
-
-        if name == 'peek.nvim' and (kind == 'install' or kind == 'update') then
-            -- peek.nvim needs a build step (deno) on first install and updates
-            vim.system({ 'deno', 'task', '--quiet', 'build:fast' }, { cwd = ev.data.path })
         end
     end,
 })
