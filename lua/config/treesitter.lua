@@ -9,7 +9,7 @@ ts.setup({})
 -- Install parsers (only installs missing ones, safe to call every startup)
 local parsers = {
     -- core
-    "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+    "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "bash",
     -- project-specific
     "cpp", "asm", "cmake", "make", "meson", "ninja",
 }
