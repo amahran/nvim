@@ -13,3 +13,13 @@ vim.keymap.set('n', '<leader>u', '<cmd>Undotree<cr>')
 vim.keymap.set('n', '<leader>gs', '<cmd>Git<cr>')
 
 -- vim-suda: works out of the box
+
+vim.keymap.set('n', '<leader>dw', function()
+  if vim.o.diffopt:find('iwhiteall') then
+    vim.opt.diffopt:remove({ 'iwhiteall', 'iblank' })
+  else
+    vim.opt.diffopt:append({ 'iwhiteall', 'iblank' })
+  end
+  vim.cmd('diffupdate')
+  print('diffopt: ' .. vim.o.diffopt)
+end, { desc = 'Toggle ignore-whitespace in diff' })
