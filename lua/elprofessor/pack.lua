@@ -9,7 +9,7 @@ vim.pack.add({
     -- Colorschemes (only kanagawa is active, others kept for easy switching)
     'https://github.com/rebelot/kanagawa.nvim',
     -- 'https://github.com/vague2k/vague.nvim',
-    -- 'https://github.com/folke/tokyonight.nvim',
+    'https://github.com/folke/tokyonight.nvim',
     'https://github.com/rose-pine/neovim',
     -- 'https://github.com/catppuccin/nvim',
     -- 'https://github.com/navarasu/onedark.nvim',
@@ -49,6 +49,7 @@ vim.pack.add({
 
     -- Utilities
     'https://github.com/lambdalisue/vim-suda',
+    'https://github.com/MeanderingProgrammer/render-markdown.nvim',
 })
 
 -- Handle post-install/update hooks
