@@ -58,6 +58,18 @@ local options = {
 
     -- floating windows boarder
     winborder = 'rounded',
+
+    -- status line
+    statusline = table.concat({
+        " %f",                                           -- file path
+        " %m%r",                                         -- modified / readonly flags
+        "%=",                                            -- switch to right side
+        " %{&fileencoding!=''?&fileencoding:&encoding}", -- encoding, falls back to utf-8
+        "%{&bomb?'[BOM]':''}",                           -- show BOM if present
+        " [%{&fileformat}]",                             -- unix / dos / mac
+        " %l:%c ",                                       -- line:column
+        "%P",                                            -- percentage
+    })
 }
 
 
